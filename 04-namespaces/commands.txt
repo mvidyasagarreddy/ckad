@@ -1,0 +1,7 @@
+1: We can add the namespace either in pod definition yaml
+
+2: create a namespace definition yaml file seperately
+kubectl create -f namespace-dev.yaml
+
+3: create a namespace from a cmd line.
+kubectl create namespace dev

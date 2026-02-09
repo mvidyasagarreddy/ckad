@@ -1,0 +1,12 @@
+#This is a sample yaml file which shows how to use the namespace
+apiVersion: v1
+kind: Pod
+metadata:
+  name: samplepod
+  namespace: dev
+  labels:
+    type: sample
+spec:
+  containers:
+    - name: sample
+      image: nginx
