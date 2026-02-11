@@ -1,0 +1,75 @@
+---
+# ConfigMap containing configuration data
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: default
+data:
+  app.properties: |
+    app.name=MyApp
+    app.version=1.0.0
+    app.environment=production
+    app.debug=false
+  database.conf: |
+    db.host=localhost
+    db.port=5432
+    db.name=myapp_db
+
+---
+# Pod that uses the ConfigMap
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-pod
+  labels:
+    app: config-app
+spec:
+  containers:
+  - name: app-container
+    image: nginx:latest
+    # Method 1: Inject config as environment variables
+    env:
+    - name: APP_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: config
+          key: app.properties
+    - name: DATABASE_CONFIG
+      valueFrom:
+        configMapKeyRef:
+          name: config
+          key: database.conf
+    
+    # Method 2: Mount ConfigMap as volume
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+      readOnly: true
+    
+    ports:
+    - containerPort: 80
+      name: http
+    
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  
+  # Define volume sourced from ConfigMap
+  volumes:
+  - name: config-volume
+    configMap:
+      name: config
+      # Optional: specify which keys to include
+      items:
+      - key: app.properties
+        path: app.properties
+      - key: database.conf
+        path: database.conf
+      defaultMode: 0644
+  
+  restartPolicy: Always
