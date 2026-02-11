@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+    - name: myapp 
+      image: nginx
+      command: ["sleep2.0s"]
+      args:
+        - "10"
