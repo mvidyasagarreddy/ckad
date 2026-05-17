@@ -1,0 +1,28 @@
+#lets apply a taint on a node
+# kubectl taint nodes node1 key1=value1:taint-effect
+
+#tainteffecs
+# 1. "NoSchedule"
+# 2. Prefernoschedule
+# 3. noexecute
+
+# kubectl taint nodes node1 color=blue:NoSchedule
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample-pod
+  labels:
+    color: blue
+spec:
+  containers:
+    - name: sample-pod
+      image: sample-pod-image
+  tolerations:
+    - key: "color"
+      value: "blue"
+      operator: "Equal"
+      effect: "NoSchedule"
+
+# To remove the taint added by the command above, you can run:
+# kubectl taint nodes node1 key1=value1:NoSchedule-
