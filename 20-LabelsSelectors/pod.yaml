@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: simple-webapp
+  labels:
+  app: app1
+  function: Frontend
+annotations:
+  buildversion: 1.34
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+        function: Frontend
+    spec:
+      containers:
+      - name: simple-webapp
+        image: simple-webapp
